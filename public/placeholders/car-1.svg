@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="Photo coming soon">
+  <rect width="1200" height="800" fill="#E9E4DC"/>
+  <rect y="560" width="1200" height="240" fill="#000" opacity=".04"/>
+  <g fill="none" stroke="#111E25" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity=".28">
+    <path d="M263 520h-43c-12 0-20-8-20-20v-60c0-20 12-34 32-40l120-30 110-90c20-16 40-24 66-24h220c28 0 50 10 70 30l80 84 110 20c28 6 46 26 46 54v56c0 12-8 20-20 20h-40"/>
+    <path d="M407 520h356M907 520h87"/>
+    <path d="M430 370l86-70c10-8 22-12 36-12h90v82zM680 288h90c18 0 32 6 44 18l60 64H680z"/>
+    <circle cx="335" cy="520" r="72"/><circle cx="335" cy="520" r="26"/>
+    <circle cx="835" cy="520" r="72"/><circle cx="835" cy="520" r="26"/>
+  </g>
+  <text x="600" y="690" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="34" letter-spacing="6" fill="#111E25" opacity=".45">PHOTO COMING SOON</text>
+</svg>

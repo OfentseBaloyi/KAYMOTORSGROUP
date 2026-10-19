@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+/*
+ * Brand tokens. Navy and orange are sampled from the logo file.
+ * Contrast notes (WCAG AA):
+ * - orange-500 fails as text on light backgrounds (3:1). Use it for fills,
+ *   rules and large display text only. On orange fills, text is navy (5.4:1).
+ * - orange-700 is the orange for text/links on paper (4.8:1).
+ */
+@theme {
+  --color-navy-950: #111e25; /* logo navy */
+  --color-navy-900: #1b2a33;
+  --color-navy-800: #2a3b46;
+  --color-navy-700: #3c4f5b;
+
+  --color-orange-500: #ee6a14; /* logo orange */
+  --color-orange-600: #d95f10;
+  --color-orange-700: #b84f0b;
+  --color-orange-100: #fcebdc;
+
+  --color-paper: #faf8f5; /* page background */
+  --color-sand: #f1ede6; /* alternate section background */
+  --color-line: #e3ddd4; /* borders and dividers */
+  --color-ink: #111e25; /* body text */
+  --color-muted: #4f5a63; /* secondary text, 6.7:1 on paper */
+
+  --color-status-available: #1f6b3a;
+  --color-status-reserved: #8a5a00;
+  --color-status-sold: #9b1c1c;
+
+  --font-sans: var(--font-barlow), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-barlow-condensed), var(--font-barlow), ui-sans-serif, sans-serif;
+
+  --radius-card: 0.375rem;
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-orange-500);
+    outline-offset: 2px;
+  }
+}
+
+/*
+ * The double stripe under "GROUP" in the logo, reused as a section divider.
+ * Usage: <div class="kombi-stripe" aria-hidden="true" />
+ */
+@utility kombi-stripe {
+  height: 7px;
+  background:
+    linear-gradient(var(--color-orange-500), var(--color-orange-500)) top / 100% 2px no-repeat,
+    linear-gradient(var(--color-navy-950), var(--color-navy-950)) bottom / 100% 2px no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
