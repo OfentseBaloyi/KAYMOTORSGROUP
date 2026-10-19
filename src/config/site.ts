@@ -50,9 +50,13 @@ export const siteConfig = {
   },
 
   brand: {
-    logo: "/brand/kay-motors-logo.jpg",
-    logoWidth: 668,
-    logoHeight: 668,
+    // Transparent PNG. The navy lettering disappears on dark backgrounds,
+    // so only place it on white/paper/sand surfaces.
+    logo: "/brand/kay-motors-logo.png",
+    logoWidth: 349,
+    logoHeight: 191,
+    // Square, white-background version (used for Open Graph / JSON-LD).
+    logoSquare: "/brand/kay-motors-logo.jpg",
   },
 } as const;
 

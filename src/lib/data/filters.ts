@@ -10,7 +10,11 @@ import {
 
 // Bad or tampered URL values are dropped (`.catch(undefined)`) instead of
 // throwing, so a broken shared link still shows the inventory.
-const optionalInt = z.coerce.number().int().nonnegative().optional().catch(undefined);
+// Empty strings (e.g. "Any" in a select) are treated as "not set".
+const emptyToUndefined = (v: unknown) => (v === "" ? undefined : v);
+const optionalInt = z
+  .preprocess(emptyToUndefined, z.coerce.number().int().nonnegative().optional())
+  .catch(undefined);
 const optionalText = z
   .string()
   .trim()
