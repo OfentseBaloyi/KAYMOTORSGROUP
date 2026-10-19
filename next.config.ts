@@ -7,7 +7,10 @@ const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
-  partialPrefetching: true,
+  // Off on purpose: with it on, car pages that weren't built at deploy time
+  // are served from a shared "fallback shell", which returns a 500 on
+  // Netlify's adapter. Off = each new car page renders once, then is cached.
+  partialPrefetching: false,
   experimental: {
     // Photos are compressed to ~300 KB in the browser before upload; this
     // leaves headroom for the multipart overhead.

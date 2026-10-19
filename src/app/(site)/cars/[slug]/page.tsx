@@ -2,7 +2,6 @@ import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
-import { Suspense } from "react";
 import { BOOKING_ANCHOR, CarActions, MobileActionBar } from "@/components/cars/car-actions";
 import { CarGrid } from "@/components/cars/car-grid";
 import { FeatureList, SpecGrid, TrustBadges } from "@/components/cars/car-specs";
@@ -50,15 +49,10 @@ export async function generateMetadata({ params }: PageProps<"/cars/[slug]">): P
   };
 }
 
-export default function CarPage({ params }: PageProps<"/cars/[slug]">) {
-  return (
-    <Suspense fallback={<CarDetailSkeleton />}>
-      <CarDetail params={params} />
-    </Suspense>
-  );
-}
-
-async function CarDetail({ params }: Pick<PageProps<"/cars/[slug]">, "params">) {
+// params is awaited at the top (not inside <Suspense>), so a car added after
+// the last deploy is rendered on its first visit and then cached as its own
+// page, and missing cars get a real 404 / 308 status instead of a streamed one.
+export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
   const { slug } = await params;
   const car = slug === PLACEHOLDER_SLUG ? null : await getCarBySlug(slug);
   if (!car) {
@@ -179,20 +173,5 @@ async function CarDetail({ params }: Pick<PageProps<"/cars/[slug]">, "params">) 
       <MobileActionBar car={car} />
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(carJsonLd(car))} />
     </>
-  );
-}
-
-function CarDetailSkeleton() {
-  return (
-    <div className="mx-auto max-w-6xl px-4 pt-16 pb-16" aria-busy="true">
-      <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
-        <div className="aspect-3/2 animate-pulse rounded-card bg-sand" />
-        <div className="space-y-4">
-          <div className="h-10 w-3/4 animate-pulse rounded-card bg-sand" />
-          <div className="h-10 w-1/2 animate-pulse rounded-card bg-sand" />
-          <div className="h-12 animate-pulse rounded-card bg-sand" />
-        </div>
-      </div>
-    </div>
   );
 }
