@@ -12,6 +12,9 @@ export const seedSource: CarSource = {
   async getCarBySlug(slug) {
     return SEED_CARS.find((car) => car.slug === slug) ?? null;
   },
+  async getCarByStockNumber(stockNumber) {
+    return SEED_CARS.find((car) => car.stockNumber.toLowerCase() === stockNumber.toLowerCase()) ?? null;
+  },
   async listAllCars() {
     return SEED_CARS;
   },

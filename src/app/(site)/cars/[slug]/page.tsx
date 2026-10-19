@@ -1,7 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { BOOKING_ANCHOR, CarActions, MobileActionBar } from "@/components/cars/car-actions";
 import { CarGrid } from "@/components/cars/car-grid";
@@ -11,7 +11,7 @@ import { ShareButton } from "@/components/cars/share-button";
 import { StatusBadge } from "@/components/cars/status-badge";
 import { ViewingSection } from "@/components/viewing/viewing-section";
 import { siteConfig } from "@/config/site";
-import { getAllCars, getCarBySlug, getSimilarCars } from "@/lib/data/cars";
+import { getAllCars, getCarByOldSlug, getCarBySlug, getSimilarCars } from "@/lib/data/cars";
 import { carTitle, formatMileage, formatPrice } from "@/lib/format";
 import { imageUrl } from "@/lib/images";
 
@@ -53,7 +53,12 @@ export default function CarPage({ params }: PageProps<"/cars/[slug]">) {
 async function CarDetail({ params }: Pick<PageProps<"/cars/[slug]">, "params">) {
   const { slug } = await params;
   const car = slug === PLACEHOLDER_SLUG ? null : await getCarBySlug(slug);
-  if (!car) notFound();
+  if (!car) {
+    // The title (and so the slug) may have been edited since the link was shared.
+    const moved = slug === PLACEHOLDER_SLUG ? null : await getCarByOldSlug(slug);
+    if (moved) permanentRedirect(`/cars/${moved.slug}`);
+    notFound();
+  }
 
   const title = carTitle(car);
   const sold = car.status === "sold";

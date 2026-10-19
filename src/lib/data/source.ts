@@ -8,6 +8,7 @@ import type { Car, CarFilters } from "@/lib/types";
 export interface CarSource {
   listCars(filters: CarFilters): Promise<Car[]>;
   getCarBySlug(slug: string): Promise<Car | null>;
+  getCarByStockNumber(stockNumber: string): Promise<Car | null>;
   /** Every car including sold ones, unfiltered. Used for filter options and sitemap. */
   listAllCars(): Promise<Car[]>;
 }

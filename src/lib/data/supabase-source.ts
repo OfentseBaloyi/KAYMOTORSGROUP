@@ -83,6 +83,20 @@ export const supabaseSource: CarSource = {
     return data ? toCar(data as CarRow) : null;
   },
 
+  async getCarByStockNumber(stockNumber) {
+    const supabase = createPublicClient();
+    const { data, error } = await supabase
+      .from("cars")
+      .select(CAR_SELECT)
+      .eq("stock_number", stockNumber.toUpperCase())
+      .maybeSingle();
+    if (error) {
+      throwUnlessTablesMissing(error);
+      return seedSource.getCarByStockNumber(stockNumber);
+    }
+    return data ? toCar(data as CarRow) : null;
+  },
+
   async listAllCars() {
     const supabase = createPublicClient();
     const { data, error } = await supabase

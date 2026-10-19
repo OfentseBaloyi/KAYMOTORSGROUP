@@ -8,6 +8,11 @@ const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  experimental: {
+    // Photos are compressed to ~300 KB in the browser before upload; this
+    // leaves headroom for the multipart overhead.
+    serverActions: { bodySizeLimit: "2mb" },
+  },
   images: {
     remotePatterns: supabaseHost
       ? [{ protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/public/**" }]

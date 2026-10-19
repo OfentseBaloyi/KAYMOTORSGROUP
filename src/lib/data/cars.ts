@@ -45,6 +45,15 @@ export async function getCarBySlug(slug: string) {
   return source().getCarBySlug(slug);
 }
 
+/** Finds a car from an outdated slug via the stock number at its end ("…-km023"). */
+export async function getCarByOldSlug(slug: string) {
+  "use cache";
+  cacheTag(CARS_TAG);
+  cacheLife("hours");
+  const stock = /-(km\d+)$/i.exec(slug)?.[1];
+  return stock ? source().getCarByStockNumber(stock) : null;
+}
+
 /** Featured cars first, then the newest, for "In stock now". Excludes sold. */
 export async function getInStockCars(limit = 6) {
   const cars = await getCars({ sort: "newest" });
