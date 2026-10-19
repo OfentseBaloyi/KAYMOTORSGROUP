@@ -1,4 +1,13 @@
-import type { BodyType, Car, CarStatus, FuelType, Transmission } from "@/lib/types";
+import type {
+  BodyType,
+  Car,
+  CarStatus,
+  FuelType,
+  PaymentReadiness,
+  TimeSlot,
+  Transmission,
+  ViewingStatus,
+} from "@/lib/types";
 
 const numberFormat = new Intl.NumberFormat("en-ZA", { maximumFractionDigits: 0 });
 const dateFormat = new Intl.DateTimeFormat("en-ZA", {
@@ -56,6 +65,43 @@ export const statusLabel: Record<CarStatus, string> = {
   reserved: "Reserved",
   sold: "Sold",
 };
+
+export const timeSlotLabel: Record<TimeSlot, string> = {
+  morning: "Morning",
+  afternoon: "Afternoon",
+  evening: "Evening",
+};
+
+export const paymentReadinessLabel: Record<PaymentReadiness, string> = {
+  cash_ready: "Cash/EFT ready",
+  finance_preapproved: "Bank finance pre-approved",
+  arranging: "Still arranging",
+};
+
+export const viewingStatusLabel: Record<ViewingStatus, string> = {
+  new: "New",
+  confirmed: "Confirmed",
+  completed: "Completed",
+  no_show: "No-show",
+  cancelled: "Cancelled",
+};
+
+/** "2026-10-21" -> "Tue 21 Oct 2026" (date-only strings, no timezone shift). */
+export function formatDayDate(isoDate: string) {
+  return new Intl.DateTimeFormat("en-ZA", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${isoDate}T00:00:00Z`));
+}
+
+/** "+27683301795" -> "068 330 1795" */
+export function formatSaPhone(e164: string) {
+  const m = /^\+27(\d{2})(\d{3})(\d{4})$/.exec(e164);
+  return m ? `0${m[1]} ${m[2]} ${m[3]}` : e164;
+}
 
 /** "2019 Volkswagen Polo 1.0 TSI Highline" */
 export function carTitle(car: Pick<Car, "year" | "make" | "model" | "variant">) {
