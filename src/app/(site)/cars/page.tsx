@@ -52,7 +52,7 @@ async function Inventory({ searchParams }: Pick<PageProps<"/cars">, "searchParam
         </div>
 
         {cars.length > 0 ? (
-          <CarGrid cars={cars} priorityCount={2} />
+          <CarGrid cars={cars} priorityCount={2} headingLevel="h2" />
         ) : (
           <div className="rounded-card border border-line bg-white p-6 md:p-10">
             <h2 className="font-display text-2xl font-bold uppercase tracking-wide">

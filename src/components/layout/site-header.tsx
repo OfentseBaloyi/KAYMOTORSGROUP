@@ -9,7 +9,7 @@ import { generalEnquiryLink } from "@/lib/messages";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-30 border-b border-line bg-white/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-30 border-b border-line bg-white">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 focus:z-50 focus:bg-white focus:px-3 focus:py-2"

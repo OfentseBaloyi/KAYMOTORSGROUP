@@ -14,6 +14,7 @@ import { siteConfig } from "@/config/site";
 import { getAllCars, getCarByOldSlug, getCarBySlug, getSimilarCars } from "@/lib/data/cars";
 import { carTitle, formatMileage, formatPrice } from "@/lib/format";
 import { imageUrl } from "@/lib/images";
+import { carJsonLd, jsonLdScript } from "@/lib/structured-data";
 
 // Cache Components needs at least one param at build time. With an empty
 // database we hand it a placeholder that resolves to the 404 page.
@@ -38,7 +39,14 @@ export async function generateMetadata({ params }: PageProps<"/cars/[slug]">): P
     title,
     description,
     alternates: { canonical: `/cars/${car.slug}` },
-    openGraph: { title, description, type: "website", url: `/cars/${car.slug}` },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `/cars/${car.slug}`,
+      siteName: siteConfig.legalName,
+      locale: "en_ZA",
+    },
   };
 }
 
@@ -169,6 +177,7 @@ async function CarDetail({ params }: Pick<PageProps<"/cars/[slug]">, "params">) 
       </div>
 
       <MobileActionBar car={car} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLdScript(carJsonLd(car))} />
     </>
   );
 }

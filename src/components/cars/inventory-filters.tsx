@@ -25,7 +25,9 @@ interface InventoryFiltersProps {
 function formToUrl(form: HTMLFormElement) {
   const params = new URLSearchParams();
   for (const [key, value] of new FormData(form)) {
-    if (typeof value === "string" && value !== "") params.set(key, value);
+    if (typeof value !== "string" || value === "") continue;
+    if (key === "sort" && value === "newest") continue; // the default; keep URLs short
+    params.set(key, value);
   }
   const qs = params.toString();
   return qs ? `/cars?${qs}` : "/cars";

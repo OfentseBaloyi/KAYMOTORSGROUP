@@ -7,14 +7,15 @@ import "./globals.css";
 const barlow = Barlow({
   variable: "--font-barlow",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  // Two weights keep the font download small; bold text uses 600.
+  weight: ["400", "600"],
   display: "swap",
 });
 
 const barlowCondensed = Barlow_Condensed({
   variable: "--font-barlow-condensed",
   subsets: ["latin"],
-  weight: ["600", "700"],
+  weight: ["700"],
   display: "swap",
 });
 
@@ -25,6 +26,14 @@ export const metadata: Metadata = {
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  applicationName: siteConfig.name,
+  openGraph: {
+    type: "website",
+    locale: "en_ZA",
+    siteName: siteConfig.legalName,
+  },
+  twitter: { card: "summary_large_image" },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
