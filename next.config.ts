@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
     // leaves headroom for the multipart overhead.
     serverActions: { bodySizeLimit: "2mb" },
   },
+  // The car share images read these files from disk at request time; make
+  // sure they're bundled into the server functions on any host.
+  outputFileTracingIncludes: {
+    "/**": ["./src/assets/fonts/**", "./public/brand/**", "./public/placeholders/**"],
+  },
   images: {
     remotePatterns: supabaseHost
       ? [{ protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/public/**" }]
