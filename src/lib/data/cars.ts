@@ -1,6 +1,8 @@
 import { cacheLife, cacheTag } from "next/cache";
 import { seedSource } from "@/lib/data/seed-source";
 import type { CarSource } from "@/lib/data/source";
+import { supabaseSource } from "@/lib/data/supabase-source";
+import { isSupabaseConfigured } from "@/lib/env";
 import type { Car, CarFilters } from "@/lib/types";
 
 /**
@@ -14,14 +16,12 @@ import type { Car, CarFilters } from "@/lib/types";
 export const CARS_TAG = "cars";
 
 function source(): CarSource {
-  // TODO (Phase 3): `return isSupabaseConfigured() ? supabaseSource : seedSource;`
-  return seedSource;
+  return isSupabaseConfigured() ? supabaseSource : seedSource;
 }
 
 /** Lets the UI show a "demo data" notice while Supabase isn't connected. */
 export function usingSeedData() {
-  // TODO (Phase 3): becomes `!isSupabaseConfigured()` (from "@/lib/env").
-  return true;
+  return !isSupabaseConfigured();
 }
 
 export async function getCars(filters: CarFilters = {}) {
