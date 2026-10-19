@@ -12,9 +12,11 @@ Work through these in order.
 - [ ] Confirm service areas and the "Buy safely" text on `/how-it-works`.
 - [ ] Add the real cars with good photos. Mark recent sales as Sold so "Recently sold" isn't empty.
 
-## Admin security (must do before using /admin in production)
-- [ ] **Add Supabase Auth** before setting `ADMIN_ENABLED=true` in production. Until then, edit stock from your own machine with `npm run dev` pointing at the live database.
-  - Places to change: `src/lib/admin/require-admin.ts` and `src/proxy.ts` (`TODO: add Supabase Auth`).
+## Admin login
+- [ ] Turn off public sign-ups: Supabase → Authentication → Sign In / Providers → **Allow new users to sign up: off**.
+- [ ] Create the client's user: Authentication → Users → **Add user → Create new user**, tick **Auto Confirm User**, set a strong password.
+- [ ] Add his email (and yours) to `ADMIN_EMAILS`, comma separated.
+- [ ] Sign in on his phone and add a car together.
 
 ## Hosting (Vercel)
 - [ ] Push to GitHub and import the repo in Vercel.
@@ -22,8 +24,9 @@ Work through these in order.
   - `NEXT_PUBLIC_SITE_URL=https://kaymotorsgroup.co.za`
   - `NEXT_PUBLIC_SUPABASE_URL`
   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-  - `SUPABASE_SERVICE_ROLE_KEY` (only needed once the admin is enabled with auth)
-  - `ADMIN_ENABLED=false` (until auth exists)
+  - `SUPABASE_SERVICE_ROLE_KEY`
+  - `ADMIN_EMAILS=client@example.com,you@example.com`
+  - `ADMIN_ENABLED=true`
 - [ ] Deploy, then open a car page and share its link on WhatsApp to check the preview image.
 
 ## Domain

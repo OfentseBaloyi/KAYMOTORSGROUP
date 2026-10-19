@@ -1,19 +1,42 @@
 import "server-only";
-import { notFound } from "next/navigation";
-import { isAdminEnabled } from "@/lib/admin/access";
+import { notFound, redirect } from "next/navigation";
+import { cache } from "react";
+import { ADMIN_LOGIN_PATH, isAdminEnabled, isAllowedAdminEmail } from "@/lib/admin/access";
+import { createAuthClient } from "@/lib/supabase/auth-client";
+
+export interface AdminUser {
+  id: string;
+  email: string;
+}
 
 /**
- * Call at the top of every admin page and admin Server Action.
+ * The real admin gate. Call at the top of every admin page and admin Server
+ * Action, before touching the service-role client.
  *
- * Server Actions are plain POST requests and can be sent to any URL, so the
- * /admin check in proxy.ts alone is not enough: this is the real gate.
+ * Server Actions are plain POST requests that can be sent to any URL, so the
+ * check in proxy.ts is only a convenience (redirects + session refresh).
+ * This function is what actually protects the data.
  *
- * TODO: add Supabase Auth. When auth is added, this is the one place to
- * check the session (e.g. via @supabase/ssr's createServerClient + cookies())
- * and confirm the user is an admin. Until then it only applies the
- * production on/off switch, so NEVER set ADMIN_ENABLED=true in production
- * before auth exists: anyone with the URL could edit stock.
+ * 1. Admin switched off (production without ADMIN_ENABLED=true) -> 404.
+ * 2. Not signed in -> login page.
+ * 3. Signed in but email not in ADMIN_EMAILS -> signed out, back to login.
  */
-export async function requireAdmin() {
+// cache(): several components on one page can call this; Supabase is asked once per request.
+export const requireAdmin = cache(async (): Promise<AdminUser> => {
   if (!isAdminEnabled()) notFound();
-}
+
+  const supabase = await createAuthClient();
+  // getUser() asks Supabase Auth to confirm the session, so a deleted or
+  // banned user is rejected even if their cookie hasn't expired yet.
+  const { data, error } = await supabase.auth.getUser();
+  const user = data.user;
+
+  if (error || !user) redirect(ADMIN_LOGIN_PATH);
+
+  if (!isAllowedAdminEmail(user.email)) {
+    await supabase.auth.signOut();
+    redirect(`${ADMIN_LOGIN_PATH}?error=not-allowed`);
+  }
+
+  return { id: user.id, email: user.email! };
+});

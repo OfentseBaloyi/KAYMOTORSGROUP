@@ -33,7 +33,17 @@ The secret key bypasses all security rules. Never commit it, never paste it in c
 
 Restart `npm run dev` after changing `.env.local`.
 
-## 4. What the security rules allow
+## 4. Admin login
+
+1. **Authentication → Sign In / Providers**: make sure **Email** is enabled and turn **Allow new users to sign up** off. Admin accounts are only created by you.
+2. **Authentication → Users → Add user → Create new user**: enter the email and a strong password, tick **Auto Confirm User**.
+3. Add that email to `ADMIN_EMAILS` in `.env.local` (comma separated for more than one), restart `npm run dev`, and sign in at `/admin/login`.
+
+A Supabase account alone isn't enough: the email must also be in `ADMIN_EMAILS`. To remove someone, delete them from that list (and from Supabase Users).
+
+There's no "forgot password" page yet. To change a password, delete the user in Authentication → Users and create them again with the new one.
+
+## 5. What the security rules allow
 
 | | Visitors (publishable key) | Admin (secret key, server only) |
 |---|---|---|

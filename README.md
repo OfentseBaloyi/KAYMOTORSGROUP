@@ -25,7 +25,7 @@ Database setup: see [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md). Before lau
 
 ## Adding a car
 
-1. Run `npm run dev` and open http://localhost:3000/admin.
+1. Open `/admin` (http://localhost:3000/admin locally) and sign in.
 2. **Add a car** → fill in the details → **Save and add photos**. The stock number (`KM001`, `KM002`, …) and web address are created automatically.
 3. On the next screen, tap **Add photos**. Photos are shrunk on the phone/computer before upload (about 1600px, ~250 KB). Drag to reorder (long-press on a phone) or tap the star to make one the cover.
 4. Tap **Copy caption** for a ready-made Instagram post.
@@ -64,7 +64,7 @@ supabase/migrations/  SQL to paste into the Supabase SQL editor
 
 - **One data layer.** Pages call `src/lib/data/cars.ts`, which picks Supabase or seed data. Reads are cached and tagged `cars`; admin changes call `updateTag("cars")` so the site updates immediately.
 - **Secret key stays on the server.** Only `src/lib/supabase/admin-client.ts` uses `SUPABASE_SERVICE_ROLE_KEY`, and it imports `server-only` so the build fails if a browser component ever imports it.
-- **Admin protection (temporary).** There is no login yet. `/admin` is blocked in production by `src/proxy.ts`, and every admin page and Server Action calls `requireAdmin()` in `src/lib/admin/require-admin.ts`. Adding Supabase Auth means adding a session check in those two places (both are marked `TODO: add Supabase Auth`).
+- **Admin login.** `/admin` needs an email + password (Supabase Auth) and the email must be in `ADMIN_EMAILS`. `src/proxy.ts` refreshes the session and redirects signed-out visitors; `requireAdmin()` in `src/lib/admin/require-admin.ts` re-checks on every admin page and Server Action (the real gate). In production `/admin` is also switched off unless `ADMIN_ENABLED=true`.
 - **Visitors never log in.** Viewing requests are inserted with the publishable key; Row Level Security only allows inserting, never reading.
 
 ## Environment variables
